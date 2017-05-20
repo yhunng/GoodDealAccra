@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabs xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <tab
+        id="@+id/tab_deals"
+        icon="@drawable/ic_deals"
+        title="Deals"
+        activeColor="@color/text"
+        barColorWhenSelected="#fff"
+        android:width="30dp"
+        android:height="35dp"
+        />
+    <tab
+        id="@+id/tab_add"
+        icon="@drawable/ic_add_circle"
+        title="Add"
+        activeColor="@color/text"
+        barColorWhenSelected="#000"
+        android:width="30dp"
+        android:height="30dp"/>
+
+</tabs>

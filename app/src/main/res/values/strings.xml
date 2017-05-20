@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Good Deal Accra</string>
+    <string name="ellipse_more">more..</string>
+    <string name="card_contact">Contact: </string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="add_deal_text">If You will like to Feature your Deal on The Good Deal Accra App, Kindly Fill and Submit The Form Below. We Will Get In Touch With You</string>
+</resources>
