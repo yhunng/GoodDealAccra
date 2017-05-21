@@ -184,12 +184,28 @@
                 android:elevation="5dp"
                 android:visibility="gone"
                 android:layout_marginBottom="10dp"/>
-            <ProgressBar
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/AddProgress"
-                android:indeterminate="true"
-                android:visibility="gone"/>
+                android:id="@+id/progressRelative"
+                android:visibility="gone">
+                <ProgressBar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/AddProgress"
+                    android:indeterminate="true"/>
+
+                <TextView
+                    android:id="@+id/myTextProgress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/AddProgress"
+                    android:text="Please wait..."
+                    android:gravity="center"
+                    android:background="@android:color/transparent" />
+
+            </RelativeLayout>
+
 
         </LinearLayout>
 

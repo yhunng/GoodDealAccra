@@ -65,12 +65,12 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         bindRefresh();
                     }
-                }, 2000);
+                }, 3000);
 
             }
         });
 
-        new Handler().postDelayed(new Runnable() {
+        /*new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 stopAnim();
@@ -82,7 +82,15 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 bindRefresh();
             }
-        });
+        });*/
+        /*runOnUiThread(new Runnable() {
+            @Override
+            public void run() {*/
+                bindRefresh();
+
+
+           /* }
+        });*/
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
                 LinearLayoutManager manager = new LinearLayoutManager(getApplicationContext());
                 mRecyclerView.setLayoutManager(manager);
                 adapter.notifyDataSetChanged();
+                stopAnim();
 
 
 
@@ -120,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 Log.d(TAG, error.toString());
                 Toast.makeText(getApplicationContext(), "Bad Network Connection. Please Try Again", Toast.LENGTH_LONG).show();
+                stopAnim();
 
             }
         }

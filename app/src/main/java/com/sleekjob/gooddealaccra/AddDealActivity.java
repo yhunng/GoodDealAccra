@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -43,6 +44,7 @@ public class AddDealActivity extends AppCompatActivity {
     AlertDialog.Builder builder;
     Toolbar toolbar;
     ProgressBar progressBar;
+    RelativeLayout progressRelative;
     TextInputLayout titleInput, emailInput, locationInput, contactInput, priceInput, discountInput, descriptionInput;
 
 
@@ -64,6 +66,7 @@ public class AddDealActivity extends AppCompatActivity {
         mAddContact = (EditText) findViewById(R.id.mAddContact);
         mAddPrice = (EditText) findViewById(R.id.mAddPrice);
         mAddDiscount = (EditText) findViewById(R.id.mAddDiscount);
+        progressRelative = (RelativeLayout) findViewById(R.id.progressRelative);
 
         titleInput = (TextInputLayout)findViewById(R.id.TitleLayout);
         emailInput = (TextInputLayout)findViewById(R.id.EmailLayout);
@@ -72,10 +75,11 @@ public class AddDealActivity extends AppCompatActivity {
         priceInput = (TextInputLayout)findViewById(R.id.PriceLayout);
         discountInput = (TextInputLayout) findViewById(R.id.DiscountLayout);
         descriptionInput = (TextInputLayout)findViewById(R.id.DescriptionLayout);
-
         builder = new AlertDialog.Builder(AddDealActivity.this);
         toolbar = (Toolbar) findViewById(R.id.mAddToolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setTitle(R.string.app_name);
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -176,14 +180,14 @@ public class AddDealActivity extends AppCompatActivity {
     public void DealSubmit() {
 
 
-        progressBar.setVisibility(View.VISIBLE);
+        progressRelative.setVisibility(View.VISIBLE);
         String url = "http://gooddealaccra.sleekjob.com/api/deals/new";
 
         StringRequest request = new StringRequest(Request.Method.POST, url, new
                 Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        progressBar.setVisibility(View.GONE);
+                        progressRelative.setVisibility(View.GONE);
                         Log.d("Mainv", response);
                         builder.setTitle("Deal Submitted");
                         builder.setMessage(response);
@@ -202,7 +206,7 @@ public class AddDealActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                progressBar.setVisibility(View.GONE);
+                progressRelative.setVisibility(View.GONE);
                 Log.d("Mainv", error.toString());
 
                 builder.setTitle("Something Went Wrong");
