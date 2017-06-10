@@ -28,12 +28,14 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     //private static final String BUNDLE_RECYCLER_LAYOUT = "classname.recycler.layout";
     RecyclerView mRecyclerView;
-    ArrayList<Deal> dealArrayList;
+    ArrayList<Deal> dealArrayList, newList;
     DealAdapter adapter;
+    private EndlessRecyclerViewScrollListener scrollListener;
     TextView mCardDescription, mCardContact;
     SwipeRefreshLayout mSwipeRefresh;
     String TAG = "MainA";
     Toolbar toolbar;
+    int page = 2;
     LinearLayout mLinearLayout;
     AVLoadingIndicatorView avi;
     FloatingActionButton fab;
@@ -56,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.mRecyclerToolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(R.string.app_name);
+        LinearLayoutManager manager = new LinearLayoutManager(getApplicationContext());
+        mRecyclerView.setLayoutManager(manager);
 
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -63,34 +67,15 @@ public class MainActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        bindRefresh();
+                        bindRefresh(1);
                     }
                 }, 3000);
 
             }
         });
 
-        /*new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                stopAnim();
-            }
-        },4000);
+                bindRefresh(1);
 
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                bindRefresh();
-            }
-        });*/
-        /*runOnUiThread(new Runnable() {
-            @Override
-            public void run() {*/
-                bindRefresh();
-
-
-           /* }
-        });*/
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,24 +86,77 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        scrollListener = new EndlessRecyclerViewScrollListener(manager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                loadMore(page);
+                page ++;
+            }
+        };
+
+        mRecyclerView.addOnScrollListener(scrollListener);
+
+
 
     }
 
 
 
-    public void bindRefresh(){
+    public void bindRefresh(int page){
 
-        String url = "http://gooddealaccra.sleekjob.com/api/deals";
+        String url = "http://gooddealaccra.sleekjob.com/api/deals?page=" + page;
         StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                //Log.d(TAG, response);
+                Log.i("Responses", response);
                 dealArrayList = new JsonConverter<Deal>().toArrayList(response, Deal.class);
                 adapter = new DealAdapter(getApplicationContext(),dealArrayList);
                 mRecyclerView.setAdapter(adapter);
-                LinearLayoutManager manager = new LinearLayoutManager(getApplicationContext());
-                mRecyclerView.setLayoutManager(manager);
+                newList = dealArrayList;
                 adapter.notifyDataSetChanged();
+                stopAnim();
+
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, error.toString());
+                Toast.makeText(getApplicationContext(), "Bad Network Connection. Please Try Again", Toast.LENGTH_LONG).show();
+                stopAnim();
+
+            }
+        }
+        );
+
+        int socketTimeout = 30000; // 30 seconds. You can change it
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+
+        stringRequest.setRetryPolicy(policy);
+        MySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
+        mSwipeRefresh.setRefreshing(false);
+
+
+
+    }
+
+    public void loadMore(int page){
+
+        String url = "http://gooddealaccra.sleekjob.com/api/deals?page=" + page;
+        StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.i("Responses", response);
+                dealArrayList = new JsonConverter<Deal>().toArrayList(response, Deal.class);
+                adapter = new DealAdapter(getApplicationContext(),dealArrayList);
+                mRecyclerView.setAdapter(adapter);
+                newList = dealArrayList;
+                adapter.notifyItemRangeInserted(newList.size(), dealArrayList.size());
                 stopAnim();
 
 
