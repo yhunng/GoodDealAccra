@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-                bindRefresh(1);
+        bindRefresh(1);
 
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -92,19 +92,17 @@ public class MainActivity extends AppCompatActivity {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to the bottom of the list
                 loadMore(page);
-                page ++;
+                ++page;
             }
         };
 
         mRecyclerView.addOnScrollListener(scrollListener);
 
 
-
     }
 
 
-
-    public void bindRefresh(int page){
+    public void bindRefresh(int page) {
 
         String url = "http://gooddealaccra.sleekjob.com/api/deals?page=" + page;
         StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
@@ -112,14 +110,13 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(String response) {
                 Log.i("Responses", response);
                 dealArrayList = new JsonConverter<Deal>().toArrayList(response, Deal.class);
-                adapter = new DealAdapter(getApplicationContext(),dealArrayList);
+                adapter = new DealAdapter(getApplicationContext(), dealArrayList);
                 mRecyclerView.setAdapter(adapter);
                 newList = dealArrayList;
                 adapter.notifyDataSetChanged();
                 stopAnim();
 
 
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -142,23 +139,22 @@ public class MainActivity extends AppCompatActivity {
         mSwipeRefresh.setRefreshing(false);
 
 
-
     }
 
-    public void loadMore(int page){
+    public void loadMore(int page) {
 
         String url = "http://gooddealaccra.sleekjob.com/api/deals?page=" + page;
         StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.i("Responses", response);
-                dealArrayList = new JsonConverter<Deal>().toArrayList(response, Deal.class);
-                adapter = new DealAdapter(getApplicationContext(),dealArrayList);
+                ArrayList<Deal> deals = new JsonConverter<Deal>().toArrayList(response, Deal.class);
+                dealArrayList.addAll(deals);
+                adapter = new DealAdapter(getApplicationContext(), dealArrayList);
                 mRecyclerView.setAdapter(adapter);
-                newList = dealArrayList;
+                newList = deals;
                 adapter.notifyItemRangeInserted(newList.size(), dealArrayList.size());
                 stopAnim();
-
 
 
             }
@@ -183,16 +179,11 @@ public class MainActivity extends AppCompatActivity {
         mSwipeRefresh.setRefreshing(false);
 
 
-
     }
 
-    void stopAnim(){
+    void stopAnim() {
         avi.hide();
     }
-
-
-
-
 
 
 }
