@@ -46,7 +46,7 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.ViewHolder> {
         holder.mCardDescription.setText(deal.description);
         String url = "http://gooddealaccra.sleekjob.com/images/" + deal.image;
         Picasso.with(context)
-                .load(url).resize(0,300)
+                .load(url)
                 .placeholder(R.drawable.load)
                 .error(android.R.drawable.stat_notify_error)
                 .into(holder.mCardImage);
