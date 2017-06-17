@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DealAdapter extends RecyclerView.Adapter<DealAdapter.ViewHolder> {
     private Context context;
@@ -45,7 +46,7 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.ViewHolder> {
         holder.mCardDescription.setText(deal.description);
         String url = "http://gooddealaccra.sleekjob.com/images/" + deal.image;
         Picasso.with(context)
-                .load(url)
+                .load(url).resize(0,300)
                 .placeholder(R.drawable.load)
                 .error(android.R.drawable.stat_notify_error)
                 .into(holder.mCardImage);
@@ -71,6 +72,16 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.ViewHolder> {
             }
         });
 
+    }
+
+    public void addAll(List data){
+        deals.addAll(data);
+        notifyDataSetChanged();
+    }
+
+    public void clearAll() {
+        deals.clear();
+        notifyDataSetChanged();
     }
 
     @Override

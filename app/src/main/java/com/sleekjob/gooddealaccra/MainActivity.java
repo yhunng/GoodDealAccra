@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     SwipeRefreshLayout mSwipeRefresh;
     String TAG = "MainA";
     Toolbar toolbar;
-    int page = 2;
+    //int page = 2;
     LinearLayout mLinearLayout;
     AVLoadingIndicatorView avi;
     FloatingActionButton fab;
@@ -67,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        adapter.clearAll();
+                        scrollListener.resetState();
                         bindRefresh(1);
                     }
                 }, 3000);
@@ -147,14 +149,14 @@ public class MainActivity extends AppCompatActivity {
         StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.i("Responses", response);
                 ArrayList<Deal> deals = new JsonConverter<Deal>().toArrayList(response, Deal.class);
-                dealArrayList.addAll(deals);
-                adapter = new DealAdapter(getApplicationContext(), dealArrayList);
-                mRecyclerView.setAdapter(adapter);
-                newList = deals;
-                adapter.notifyItemRangeInserted(newList.size(), dealArrayList.size());
+                adapter.addAll(deals);
                 stopAnim();
+                //adapter = new DealAdapter(getApplicationContext(), dealArrayList);
+                //mRecyclerView.setAdapter(adapter);
+//                newList = deals;
+//                adapter.notifyItemRangeInserted(newList.size(), dealArrayList.size());
+//                stopAnim();
 
 
             }
