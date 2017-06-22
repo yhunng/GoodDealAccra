@@ -9,7 +9,7 @@ public class Deal implements Parcelable {
     public String user_id;
     public String title;
     public String price;
-    public int discount;
+    public String discount;
     public String image;
     public String location;
     public String description;
@@ -22,7 +22,7 @@ public class Deal implements Parcelable {
         user_id = in.readString();
         title = in.readString();
         price = in.readString();
-        discount = in.readInt();
+        discount = in.readString();
         image = in.readString();
         location = in.readString();
         description = in.readString();
@@ -58,11 +58,11 @@ public class Deal implements Parcelable {
         this.price = price;
     }
 
-    public int getDiscount() {
+    public String getDiscount() {
         return discount;
     }
 
-    public void setDiscount(int discount) {
+    public void setDiscount(String discount) {
         this.discount = discount;
     }
 
@@ -133,7 +133,7 @@ public class Deal implements Parcelable {
         dest.writeString(user_id);
         dest.writeString(title);
         dest.writeString(price);
-        dest.writeInt(discount);
+        dest.writeString(discount);
         dest.writeString(image);
         dest.writeString(location);
         dest.writeString(description);

@@ -3,6 +3,7 @@ package com.sleekjob.gooddealaccra;
 
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,13 +38,25 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.ViewHolder> {
         return holder;
     }
 
+    public float disc(float old, float fresh){
+
+        float sum = old - fresh;
+        float divs = sum / old;
+        float  fin = divs * 100;
+        return Math.round(fin);
+    }
+
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         Deal deal = deals.get(position);
+        //float disc = (Float.valueOf(deal.discount)/Float.valueOf(deal.price)) * 100;
+        float ori = disc(Float.valueOf(deal.price), Float.valueOf(deal.discount));
+        //double ori = new BigDecimal(disc).setScale(2, RoundingMode.HALF_UP).doubleValue();
         holder.mCardTitle.setText(deal.title);
         holder.mCardLocation.setText(deal.location);
-        holder.mCardDiscount.setText(String.valueOf(deal.discount));
-        holder.mCardPrice.setText(deal.price);
+        holder.mCardDiscount.setText(String.valueOf(ori));
+        holder.mCardPrice.setText(deal.discount);
+        holder.oPrice.setText(deal.price);
         holder.mCardContact.setText(deal.contact);
         holder.mCardDescription.setText(deal.description);
         String url = "http://gooddealaccra.sleekjob.com/images/" + deal.image;
@@ -72,6 +87,9 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.ViewHolder> {
             }
         });
 
+        holder.oPTag.setPaintFlags(holder.oPTag.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        holder.oPrice.setPaintFlags(holder.oPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
     }
 
     public void addAll(List data){
@@ -100,7 +118,7 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.ViewHolder> {
         private TextView mCardLocation;
         private TextView mCardDescription;
         private TextView mCardContact;
-        private TextView mCardPrice;
+        private TextView mCardPrice, oPrice, oPTag;
         private TextView mCardDiscount, more;
         private LinearLayout mCardInvisible;
 
@@ -113,6 +131,8 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.ViewHolder> {
             mCardContact = (TextView) itemView.findViewById(R.id.mCardContact);
             mCardPrice = (TextView) itemView.findViewById(R.id.mCardPrice);
             mCardDiscount = (TextView) itemView.findViewById(R.id.mCardDiscount);
+            oPrice = (TextView) itemView.findViewById(R.id.oPrice);
+            oPTag = (TextView) itemView.findViewById(R.id.oPTag);
             more = (TextView) itemView.findViewById(R.id.mCardMore);
             mCardInvisible = (LinearLayout) itemView.findViewById(R.id.mCardInvisible);
 

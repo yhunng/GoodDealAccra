@@ -143,9 +143,6 @@ public class AddDealActivity extends AppCompatActivity {
         } else if (price.length() == 0) {
             priceInput.setError("This Field is Required");
 
-        } else if (discount.length() > 2) {
-            discountInput.setError("Should Not Be More Than 2 Digits (Do you want to kill your business?..lol) ");
-
         } else {
 
 

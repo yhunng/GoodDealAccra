@@ -1,6 +1,7 @@
 package com.sleekjob.gooddealaccra;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -12,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,13 +33,14 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Deal> dealArrayList, newList;
     DealAdapter adapter;
     private EndlessRecyclerViewScrollListener scrollListener;
-    TextView mCardDescription, mCardContact;
+    TextView mCardDescription, mCardContact, oPTag, oPrice;
     SwipeRefreshLayout mSwipeRefresh;
     String TAG = "MainA";
     Toolbar toolbar;
     //int page = 2;
     LinearLayout mLinearLayout;
     AVLoadingIndicatorView avi;
+    ProgressBar mProgress;
     FloatingActionButton fab;
 
 
@@ -51,11 +54,17 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         mCardDescription = (TextView) findViewById(R.id.mCardDescription);
         mCardContact = (TextView) findViewById(R.id.mCardContact);
+//        oPTag = (TextView) findViewById(R.id.oPTag);
+//        oPrice = (TextView) findViewById(R.id.oPrice);
         mLinearLayout = (LinearLayout) findViewById(R.id.mLinearLayout);
         avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
         fab = (FloatingActionButton) findViewById(R.id.fab);
+        mProgress = (ProgressBar) findViewById(R.id.mProgress);
 
         toolbar = (Toolbar) findViewById(R.id.mRecyclerToolbar);
+
+
+
         setSupportActionBar(toolbar);
         toolbar.setTitle(R.string.app_name);
         LinearLayoutManager manager = new LinearLayoutManager(getApplicationContext());
@@ -91,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
         scrollListener = new EndlessRecyclerViewScrollListener(manager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                mProgress.setVisibility(View.VISIBLE);
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to the bottom of the list
                 loadMore(page);
@@ -151,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(String response) {
                 ArrayList<Deal> deals = new JsonConverter<Deal>().toArrayList(response, Deal.class);
                 adapter.addAll(deals);
-                stopAnim();
+                mProgress.setVisibility(View.GONE);
                 //adapter = new DealAdapter(getApplicationContext(), dealArrayList);
                 //mRecyclerView.setAdapter(adapter);
 //                newList = deals;
@@ -165,20 +175,18 @@ public class MainActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 Log.d(TAG, error.toString());
                 Toast.makeText(getApplicationContext(), "Bad Network Connection. Please Try Again", Toast.LENGTH_LONG).show();
-                stopAnim();
-
+                mProgress.setVisibility(View.GONE);
             }
         }
         );
 
-        int socketTimeout = 30000; // 30 seconds. You can change it
+        int socketTimeout = 10000; // 10 seconds. You can change it
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeout,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
 
         stringRequest.setRetryPolicy(policy);
         MySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
-        mSwipeRefresh.setRefreshing(false);
 
 
     }

@@ -104,7 +104,7 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:hint="Enter Contact"
-                    android:inputType="text" />
+                    android:inputType="phone" />
             </android.support.design.widget.TextInputLayout>
 
 
@@ -119,8 +119,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="Enter Price (Please don't add 'GH¢')"
-                    android:inputType="text" />
+                    android:hint="Enter Old Price in 'GH¢'"
+                    android:inputType="numberDecimal" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -135,8 +135,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="Enter Discount (Please don't add '%')"
-                    android:inputType="text" />
+                    android:hint="Enter New Price in 'GH¢'"
+                    android:inputType="numberDecimal" />
 
             </android.support.design.widget.TextInputLayout>
 
